@@ -1,10 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>My GitHub Pages Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site.title | default: "我的网站" }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        
+        main {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        
+        .content-section p {
+            margin-bottom: 1rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        footer p {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, GitHub Pages!</h1>
-    <p>This is my first GitHub Pages website.</p>
+    <header>
+        <nav>
+            <div class="logo">我的博客</div>
+            <ul class="nav-links">
+                <li><a href="/">首页</a></li>
+                <li><a href="/about.html">关于</a></li>
+                <li><a href="/blog.html">博客</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>欢迎来到我的网站</h1>
+            <p>探索技术、分享知识、记录生活</p>
+        </section>
+
+        <section class="content-section">
+            <h2>关于我</h2>
+            <p>这是一个基于 Jekyll 构建的简洁静态网站。Jekyll 是 GitHub 官方支持的静态网站生成器，非常适合搭建博客、文档等网站。</p>
+            <p>通过简单的配置和 Markdown 编写，就可以快速生成专业的网站。</p>
+        </section>
+
+        <section class="content-section">
+            <h2>特色功能</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>简单易用</h3>
+                    <p>使用 Markdown 编写内容，无需复杂配置</p>
+                </div>
+                <div class="feature-card">
+                    <h3>快速部署</h3>
+                    <p>支持 GitHub Pages 一键部署</p>
+                </div>
+                <div class="feature-card">
+                    <h3>高度定制</h3>
+                    <p>灵活的主题和插件系统</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>最新文章</h2>
+            <ul>
+                {% for post in site.posts limit:3 %}
+                <li>
+                    <a href="{{ post.url }}">{{ post.title }}</a>
+                    <span style="color: #666; font-size: 0.9rem;">- {{ post.date | date: "%Y-%m-%d" }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; {{ site.time | date: "%Y" }} 我的网站. 保留所有权利.</p>
+    </footer>
 </body>
 </html>
