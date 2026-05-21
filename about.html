@@ -1,0 +1,246 @@
+---
+layout: default
+title: 关于
+permalink: /about/
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 - chuyang1008</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(0, 0, 0, 0.12);
+            --glass-shadow: rgba(0, 0, 0, 0.08);
+            --text-primary: #2d2d3a;
+            --text-secondary: rgba(45, 45, 58, 0.75);
+            --accent: #ff6b9d;
+            --accent2: #c44dff;
+            --accent3: #4dc9f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary); min-height: 100vh; overflow-x: hidden;
+            position: relative; background: rgba(255, 255, 255, 0.85);
+        }
+        .bg-layer {
+            position: fixed; inset: 0; z-index: -2;
+            background-image: url('/assets/images/【哲风壁纸】人类世界-动画场景.png');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+        }
+        .bg-overlay { position: fixed; inset: 0; z-index: -1; background: rgba(255, 255, 255, 0.7); }
+
+        .navbar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0,0,0,0.08); padding: 0 2rem; transition: background 0.4s;
+        }
+        .navbar.scrolled { background: rgba(255,255,255,0.92); }
+        .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 64px; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .nav-brand:hover .nav-avatar { transform: scale(1.08); box-shadow: 0 0 16px rgba(196,77,255,0.25); }
+        .nav-logo {
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.4rem; color: var(--text-primary);
+            letter-spacing: 2px; transition: text-shadow 0.3s;
+        }
+        .nav-brand:hover .nav-logo { text-shadow: 0 0 16px rgba(196,77,255,0.4); }
+        .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; position: relative; padding: 4px 0; transition: color 0.3s; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--text-primary); }
+        .nav-links a.active::after { width: 100%; }
+        .nav-github { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.06); padding: 8px 16px; border-radius: 24px; transition: all 0.3s; color: var(--text-primary); text-decoration: none; }
+        .nav-github:hover { background: rgba(0,0,0,0.12); transform: translateY(-2px); }
+        .nav-github svg { width: 20px; height: 20px; fill: var(--text-primary); }
+
+        main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+        .page-header { text-align: center; padding: 3rem 1rem 2rem; animation: fadeInUp 0.8s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .page-header h1 {
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: clamp(2rem, 5vw, 3rem);
+            background: linear-gradient(135deg, #e85d75, #a64dff, #3da8d8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .page-header .subtitle { font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem; }
+
+        .glass-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 2.5rem;
+            margin-bottom: 2rem; box-shadow: 0 4px 20px var(--glass-shadow);
+            transition: transform 0.3s, box-shadow 0.3s; animation: fadeInUp 0.8s ease forwards;
+        }
+        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.12); }
+        .glass-card h2 { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.5rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .glass-card h3 { font-size: 1.15rem; color: var(--text-primary); margin: 1.5rem 0 0.8rem; }
+
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+        .skill-tag { padding: 6px 16px; border-radius: 20px; font-size: 0.88rem; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.1); transition: all 0.3s; cursor: default; color: var(--text-secondary); }
+        .skill-tag:hover { background: rgba(196,77,255,0.1); border-color: var(--accent2); transform: translateY(-2px); color: var(--text-primary); }
+
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2)); border-radius: 1px; }
+        .timeline-item { position: relative; padding: 0 0 1.8rem 1.5rem; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::before { content: ''; position: absolute; left: -2.3rem; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent2); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--accent2); }
+        .timeline-date { font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+        .timeline-title { font-weight: 700; color: var(--text-primary); margin: 2px 0; }
+        .timeline-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .contact-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; background: rgba(0,0,0,0.03); text-decoration: none; color: var(--text-primary); transition: all 0.3s; font-size: 0.95rem; }
+        .contact-item:hover { background: rgba(196,77,255,0.08); transform: translateY(-2px); }
+        .contact-icon { font-size: 1.3rem; }
+
+        .intro-text { color: var(--text-secondary); line-height: 1.9; font-size: 1rem; }
+
+        footer { position: relative; z-index: 1; text-align: center; padding: 2.5rem 1rem; color: rgba(0,0,0,0.45); font-size: 0.85rem; margin-top: 1rem; }
+        footer .heart { display: inline-block; animation: heartbeat 1.2s ease infinite; color: var(--accent); }
+        @keyframes heartbeat { 0%,100%{transform:scale(1)} 25%{transform:scale(1.2)} 50%{transform:scale(1)} 75%{transform:scale(1.15)} }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0 1rem; } .nav-links { gap: 1rem; }
+            .nav-avatar { width: 40px; height: 40px; } .nav-logo { font-size: 1.1rem; }
+            .nav-github span { display: none; } .glass-card { padding: 1.5rem; }
+            .contact-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .nav-links a { font-size: 0.8rem; } .nav-logo { font-size: 1rem; }
+            .nav-avatar { width: 34px; height: 34px; }
+            .page-header h1 { font-size: 1.8rem; } .contact-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <img class="nav-avatar" src="https://github.com/chuyang1008.png" alt="avatar"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23c44dff%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>✦</text></svg>'">
+                <span class="nav-logo">chuyang1008</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">首页</a></li>
+                <li><a href="/about.html" class="active">关于</a></li>
+                <li><a href="/blog.html">博客</a></li>
+                <li><a class="nav-github" href="https://github.com/chuyang1008" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg><span>GitHub</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1>关于我</h1>
+            <p class="subtitle">热爱技术，持续成长</p>
+        </div>
+
+        <section class="glass-card" style="animation-delay: 0.1s;">
+            <h2>👋 个人介绍</h2>
+            <p class="intro-text">
+                你好！我是 chuyang1008，一名热爱技术与创造的开发者。我相信代码不仅是工具，更是一种表达创造力的方式。
+            </p>
+            <p class="intro-text" style="margin-top:1rem;">
+                专注于前端开发和开源社区贡献，热衷于探索新技术并将其应用于实际项目中。在业余时间，我喜欢研究 UI/UX 设计、撰写技术博客，以及参与开源项目。
+            </p>
+            <p class="intro-text" style="margin-top:1rem;">
+                始终保持对新知识的好奇心，相信持续学习和分享是成长的最佳途径。希望在这个博客中，与你分享我的技术见解和项目经验。
+            </p>
+        </section>
+
+        <section class="glass-card" style="animation-delay: 0.2s;">
+            <h2>🛠️ 技术栈</h2>
+            <div class="skill-tags">
+                <span class="skill-tag">HTML5 / CSS3</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Vue.js</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Git / GitHub</span>
+                <span class="skill-tag">VS Code</span>
+                <span class="skill-tag">Jekyll</span>
+                <span class="skill-tag">Responsive Design</span>
+            </div>
+            <h3>🔧 工具与平台</h3>
+            <div class="skill-tags" style="margin-top:0.5rem;">
+                <span class="skill-tag">GitHub Pages</span>
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Linux</span>
+                <span class="skill-tag">Markdown</span>
+                <span class="skill-tag">REST API</span>
+            </div>
+        </section>
+
+        <section class="glass-card" style="animation-delay: 0.3s;">
+            <h2>📅 学习历程</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2024 - 至今</div>
+                    <div class="timeline-title">全栈开发探索</div>
+                    <div class="timeline-desc">深入学习前后端技术栈，参与开源项目，搭建个人博客</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2023 - 2024</div>
+                    <div class="timeline-title">前端技术专攻</div>
+                    <div class="timeline-desc">系统学习 React、Vue.js 等主流前端框架，开始贡献开源社区</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">2022 - 2023</div>
+                    <div class="timeline-title">编程入门与基础</div>
+                    <div class="timeline-desc">从 HTML/CSS/JavaScript 起步，掌握 Web 开发基础知识</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" style="animation-delay: 0.4s;">
+            <h2>📬 联系方式</h2>
+            <p style="color:var(--text-secondary); margin-bottom:1rem;">欢迎通过以下方式与我交流：</p>
+            <div class="contact-grid">
+                <a class="contact-item" href="https://github.com/chuyang1008" target="_blank" rel="noopener">
+                    <span class="contact-icon">💻</span> GitHub
+                </a>
+                <a class="contact-item" href="mailto:chuyang1008@example.com">
+                    <span class="contact-icon">📧</span> Email
+                </a>
+                <div class="contact-item">
+                    <span class="contact-icon">📝</span> 博客留言
+                </div>
+                <a class="contact-item" href="https://github.com/chuyang1008/chuyang1008.github.io/issues" target="_blank" rel="noopener">
+                    <span class="contact-icon">💬</span> Issues
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Made with <span class="heart">❤</span> by chuyang1008 &nbsp;|&nbsp; Powered by Jekyll &amp; GitHub Pages</p>
+        <p style="margin-top:6px;">&copy; 2026 All rights reserved.</p>
+    </footer>
+
+    <script>
+    (function() {
+        var navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    })();
+    </script>
+</body>
+</html>

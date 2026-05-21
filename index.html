@@ -48,11 +48,17 @@
         }
         .navbar.scrolled { background: rgba(255,255,255,0.92); }
         .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 64px; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .nav-brand:hover .nav-avatar { transform: scale(1.08); box-shadow: 0 0 16px rgba(196,77,255,0.25); }
         .nav-logo {
-            font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.6rem; color: var(--text-primary); text-decoration: none;
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.4rem; color: var(--text-primary); text-decoration: none;
             letter-spacing: 2px; transition: text-shadow 0.3s;
         }
-        .nav-logo:hover { text-shadow: 0 0 16px rgba(196,77,255,0.4); }
+        .nav-brand:hover .nav-logo { text-shadow: 0 0 16px rgba(196,77,255,0.4); }
         .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
         .nav-links a {
             color: var(--text-secondary); text-decoration: none; font-weight: 500;
@@ -169,11 +175,14 @@
 
         @media (max-width: 768px) {
             .navbar { padding: 0 1rem; } .nav-links { gap: 1rem; }
+            .nav-avatar { width: 40px; height: 40px; }
+            .nav-logo { font-size: 1.1rem; }
             .nav-github span { display: none; } .hero { padding: 3rem 0.5rem 2.5rem; }
             .repo-grid { grid-template-columns: 1fr; } .glass-card { padding: 1.5rem; }
         }
         @media (max-width: 480px) {
-            .nav-links a { font-size: 0.8rem; } .nav-logo { font-size: 1.2rem; }
+            .nav-links a { font-size: 0.8rem; } .nav-logo { font-size: 1rem; }
+            .nav-avatar { width: 34px; height: 34px; }
             .hero h1 { font-size: 1.8rem; } .hero .subtitle { font-size: 0.95rem; letter-spacing: 2px; }
         }
     </style>
@@ -184,7 +193,11 @@
 
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
-            <a href="/" class="nav-logo">✦ chuyang1008</a>
+            <a href="/" class="nav-brand">
+                <img class="nav-avatar" src="https://github.com/chuyang1008.png" alt="avatar"
+                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23c44dff%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>✦</text></svg>'">
+                <span class="nav-logo">chuyang1008</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="/">首页</a></li>
                 <li><a href="/about.html">关于</a></li>
@@ -201,8 +214,6 @@
 
     <main>
         <section class="hero">
-            <img class="hero-avatar" src="https://github.com/chuyang1008.png" alt="avatar"
-                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23c44dff%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>✦</text></svg>'">
             <h1>GoGoGo</h1>
             <p class="subtitle">探索 · 创造 · 分享 </p>
             <div class="tagline">
@@ -215,9 +226,10 @@
 
         <section class="glass-card" style="animation-delay: 0.15s;">
             <h2><span class="icon">🌸</span> 关于我</h2>
-            <p style="color:var(--text-secondary); line-height:1.8;">
-                我的个人博客,仍在搭建中
+            <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:1rem;">
+                热爱技术与创造的开发者，专注于前端开发、开源项目和持续学习。这里记录我的学习历程与项目实践。
             </p>
+            <a href="/about.html" style="color:var(--accent2); text-decoration:none; font-weight:500; font-size:0.95rem;">了解更多 →</a>
         </section>
 
         <section class="glass-card" id="reposSection" style="animation-delay: 0.3s;">
