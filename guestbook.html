@@ -1,0 +1,210 @@
+---
+layout: default
+title: 留言板
+---
+
+<div class="page-header">
+  <h1>留言板</h1>
+  <p class="subtitle">欢迎留言，交流想法</p>
+</div>
+
+<section class="card">
+  <h2 class="card-title">留言</h2>
+
+  <div id="msgStatus" class="status-msg"></div>
+
+  <form id="msgForm" class="guestbook-form">
+    <div class="form-group">
+      <label class="form-label" for="msgAuthor">昵称</label>
+      <input class="form-input" type="text" id="msgAuthor" placeholder="你的名字" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="msgContent">留言内容</label>
+      <textarea class="form-textarea" id="msgContent" rows="4" placeholder="写下你想说的话..." required></textarea>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" id="msgSubmitBtn">发表留言</button>
+      <span class="text-tertiary" style="font-size:0.82rem;">留言通过 GitHub Issues 存储</span>
+    </div>
+  </form>
+</section>
+
+<section class="card" id="messagesSection">
+  <h2 class="card-title">全部留言</h2>
+  <div id="msgListContainer">
+    <div class="repo-loading">
+      <div class="spinner"></div>
+      <p>正在加载留言...</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var REPO = 'chuyang1008/chuyang1008.github.io';
+  // 使用一个固定的 Issue 来存储留言
+  var GUESTBOOK_ISSUE_TITLE = 'Guestbook - 留言板';
+  var msgForm = document.getElementById('msgForm');
+  var authorInput = document.getElementById('msgAuthor');
+  var contentInput = document.getElementById('msgContent');
+  var submitBtn = document.getElementById('msgSubmitBtn');
+  var msgStatus = document.getElementById('msgStatus');
+  var msgContainer = document.getElementById('msgListContainer');
+
+  var issueCache = null;
+
+  // 查找或创建留言板 Issue
+  function getOrCreateIssue() {
+    // 先搜索是否已存在 Guestbook issue
+    return fetch('https://api.github.com/search/issues?q=' +
+      encodeURIComponent(GUESTBOOK_ISSUE_TITLE) +
+      '+repo:' + REPO + '+type:issue+state:open')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.items && data.items.length > 0) {
+          issueCache = data.items[0];
+          return issueCache;
+        }
+        // Issue 不存在，创建一个（需要 token）
+        var token = getToken();
+        if (!token) {
+          // 没有 token 无法创建 issue，显示提示
+          throw new Error('no_issue');
+        }
+        return fetch('https://api.github.com/repos/' + REPO + '/issues', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'token ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: GUESTBOOK_ISSUE_TITLE,
+            body: '欢迎在留言板留下你的想法。所有留言都会显示在网站上。',
+            labels: ['guestbook']
+          })
+        }).then(function(r) { return r.json(); })
+        .then(function(issue) {
+          issueCache = issue;
+          return issue;
+        });
+      });
+  }
+
+  function getToken() {
+    return localStorage.getItem('github_token') || '';
+  }
+
+  // 加载留言（从 Issue comments）
+  function loadMessages() {
+    getOrCreateIssue().then(function(issue) {
+      return fetch(issue.comments_url);
+    }).then(function(r) { return r.json(); })
+    .then(function(comments) {
+      if (!comments || comments.length === 0) {
+        msgContainer.innerHTML = '<div class="empty-state"><span class="icon" style="font-size:2rem;">&#9997;</span><p>还没有留言，快来发表第一条留言吧</p></div>';
+        return;
+      }
+      var html = '<ul class="message-list">';
+      // 倒序显示（最新的在前）
+      comments.reverse().forEach(function(c) {
+        var author = c.user ? c.user.login : '匿名';
+        var avatar = c.user ? c.user.avatar_url : '';
+        var date = new Date(c.created_at).toLocaleDateString('zh-CN', {
+          year: 'numeric', month: 'long', day: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+        // 简单解析 body，只取纯文本第一段
+        var body = c.body || '';
+        html += '<li class="message-item">';
+        if (avatar) {
+          html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">';
+          html += '<img src="'+avatar+'" alt="" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--border);">';
+          html += '<div><div class="message-author">'+escapeHtml(author)+'</div>';
+          html += '<div class="message-time">'+date+'</div></div></div>';
+        } else {
+          html += '<div class="message-author">'+escapeHtml(author)+'</div>';
+          html += '<div class="message-time">'+date+'</div>';
+        }
+        html += '<div class="message-content">'+escapeHtml(body)+'</div>';
+        html += '</li>';
+      });
+      html += '</ul>';
+      msgContainer.innerHTML = html;
+    })
+    .catch(function(err) {
+      if (err.message === 'no_issue') {
+        msgContainer.innerHTML = '<div class="empty-state"><span class="icon">&#9997;</span><p>留言板 Issue 尚未创建。请先配置 GitHub 令牌以自动创建，或手动在仓库创建一个名为 "Guestbook - 留言板" 的 Issue。</p></div>';
+        return;
+      }
+      console.warn(err);
+      msgContainer.innerHTML = '<div class="repo-error">加载留言失败，请稍后再试</div>';
+    });
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // 发表留言
+  msgForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var token = getToken();
+    if (!token) {
+      msgStatus.className = 'status-msg show error';
+      msgStatus.textContent = '请先配置 GitHub 令牌才能发表留言（在写博客页面可以设置）';
+      return;
+    }
+
+    var author = authorInput.value.trim();
+    var content = contentInput.value.trim();
+
+    if (!author || !content) {
+      msgStatus.className = 'status-msg show error';
+      msgStatus.textContent = '请填写昵称和留言内容';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '发表中...';
+    msgStatus.className = 'status-msg show info';
+    msgStatus.textContent = '正在提交留言...';
+
+    getOrCreateIssue().then(function(issue) {
+      return fetch(issue.comments_url, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'token ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: author + ':\n\n' + content
+        })
+      });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      msgStatus.className = 'status-msg show success';
+      msgStatus.textContent = '留言发表成功！';
+      submitBtn.disabled = false;
+      submitBtn.textContent = '发表留言';
+      authorInput.value = '';
+      contentInput.value = '';
+      loadMessages();
+    })
+    .catch(function(err) {
+      console.error(err);
+      msgStatus.className = 'status-msg show error';
+      msgStatus.textContent = '发表失败：' + (err.message || '请稍后再试');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '发表留言';
+    });
+  });
+
+  // 初始加载留言
+  loadMessages();
+  // 每 60 秒刷新一次
+  setInterval(loadMessages, 60000);
+})();
+</script>

@@ -1,0 +1,259 @@
+---
+layout: default
+title: 写博客
+---
+
+<div class="page-header">
+  <h1>写博客</h1>
+  <p class="subtitle">使用 Markdown 编写新的博客文章</p>
+</div>
+
+<section class="card">
+  <div id="statusMsg" class="status-msg"></div>
+
+  <form id="postForm" class="editor-container">
+    <div class="form-group">
+      <label class="form-label" for="postTitle">文章标题</label>
+      <input class="form-input" type="text" id="postTitle" placeholder="输入文章标题" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="postContent">文章内容 (Markdown)</label>
+      <textarea class="form-textarea code" id="postContent" rows="16" placeholder="使用 Markdown 格式编写文章内容..." required></textarea>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label class="form-label" for="postCategory">分类</label>
+        <input class="form-input" type="text" id="postCategory" placeholder="例如: JavaScript" value="技术">
+        <span class="form-hint">多个分类用逗号分隔</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="postDate">发布日期</label>
+        <input class="form-input" type="date" id="postDate">
+      </div>
+    </div>
+
+    <div class="form-group" style="display:none;">
+      <label class="form-label" for="githubToken">GitHub 访问令牌</label>
+      <input class="form-input" type="password" id="githubToken" placeholder="需要 repo 权限的个人访问令牌">
+      <span class="form-hint">令牌仅在本地浏览器中使用，用于通过 GitHub API 提交文章</span>
+    </div>
+
+    <div class="form-actions" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+      <button type="submit" class="btn btn-primary" id="publishBtn">发布文章</button>
+      <button type="button" class="btn btn-ghost" id="previewToggleBtn">预览</button>
+      <span class="text-tertiary" style="font-size:0.82rem;" id="tokenStatus">未配置 GitHub 令牌</span>
+    </div>
+  </form>
+
+  <div id="previewArea" class="editor-preview mt-3"></div>
+</section>
+
+<section class="card" style="background:var(--accent-light);border-color:transparent;">
+  <h2 class="card-title" style="font-size:1rem;">使用说明</h2>
+  <ol style="padding-left:1.2rem;color:var(--text-secondary);font-size:0.9rem;line-height:2;">
+    <li>在 GitHub 创建 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener" style="color:var(--accent);">个人访问令牌</a>（勾选 repo 权限）</li>
+    <li>填写文章标题和 Markdown 内容</li>
+    <li>点击"发布文章"，文章将自动提交到 <code>_posts/</code> 目录</li>
+    <li>发布后 GitHub Actions 会自动构建部署</li>
+  </ol>
+</section>
+
+<script>
+(function() {
+  var form = document.getElementById('postForm');
+  var titleInput = document.getElementById('postTitle');
+  var contentInput = document.getElementById('postContent');
+  var catInput = document.getElementById('postCategory');
+  var dateInput = document.getElementById('postDate');
+  var tokenInput = document.getElementById('githubToken');
+  var publishBtn = document.getElementById('publishBtn');
+  var statusMsg = document.getElementById('statusMsg');
+  var previewArea = document.getElementById('previewArea');
+  var previewToggleBtn = document.getElementById('previewToggleBtn');
+  var tokenStatus = document.getElementById('tokenStatus');
+
+  // 检查 localStorage 中是否保存了 token
+  var savedToken = localStorage.getItem('github_token');
+  if (savedToken) {
+    tokenInput.value = savedToken;
+    tokenStatus.textContent = '已配置 GitHub 令牌';
+    tokenStatus.style.color = 'var(--accent)';
+  }
+
+  // 自动填充日期
+  var today = new Date();
+  dateInput.value = today.getFullYear() + '-' +
+    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+    String(today.getDate()).padStart(2, '0');
+
+  // 保存令牌到 localStorage
+  tokenInput.addEventListener('change', function() {
+    if (this.value) {
+      localStorage.setItem('github_token', this.value);
+      tokenStatus.textContent = '已配置 GitHub 令牌';
+      tokenStatus.style.color = 'var(--accent)';
+    } else {
+      localStorage.removeItem('github_token');
+      tokenStatus.textContent = '未配置 GitHub 令牌';
+      tokenStatus.style.color = '';
+    }
+  });
+
+  // 预览切换
+  previewToggleBtn.addEventListener('click', function() {
+    if (previewArea.classList.contains('active')) {
+      previewArea.classList.remove('active');
+      previewArea.style.display = 'none';
+      previewToggleBtn.textContent = '预览';
+      return;
+    }
+
+    var md = contentInput.value;
+    if (!md.trim()) {
+      previewArea.innerHTML = '<p class="text-tertiary">暂无内容</p>';
+    } else {
+      // 简单的 Markdown 渲染
+      var html = md
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+        .replace(/!\[(.+?)\]\((.+?)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;">')
+        .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(.+)$/gm, function(m) {
+          if (m.startsWith('<')) return m;
+          return '<p>'+m+'</p>';
+        });
+      previewArea.innerHTML = html;
+    }
+    previewArea.classList.add('active');
+    previewArea.style.display = 'block';
+    previewToggleBtn.textContent = '关闭预览';
+  });
+
+  // 检查是否已提供令牌
+  function getToken() {
+    var token = tokenInput.value.trim();
+    if (!token) {
+      token = localStorage.getItem('github_token');
+    }
+    return token;
+  }
+
+  // 提交表单 - 通过 GitHub API 创建文章
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var token = getToken();
+    if (!token) {
+      statusMsg.className = 'status-msg show error';
+      statusMsg.textContent = '请先配置 GitHub 访问令牌';
+      return;
+    }
+
+    var title = titleInput.value.trim();
+    var content = contentInput.value.trim();
+    var categories = catInput.value.trim();
+    var date = dateInput.value;
+
+    if (!title || !content) {
+      statusMsg.className = 'status-msg show error';
+      statusMsg.textContent = '请填写标题和内容';
+      return;
+    }
+
+    // 生成文件名
+    var slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-')
+      .replace(/^-|-$/g, '');
+    var filename = date + '-' + slug + '.markdown';
+
+    // 构建 front matter
+    var frontMatter = '---\n';
+    frontMatter += 'layout: post\n';
+    frontMatter += 'title: "' + title + '"\n';
+    frontMatter += 'date: ' + date + ' 12:00:00 +0800\n';
+    if (categories) {
+      var cats = categories.split(',').map(function(c) { return c.trim(); }).filter(Boolean);
+      if (cats.length > 0) {
+        frontMatter += 'categories: ' + cats.join(' ') + '\n';
+      }
+    }
+    frontMatter += '---\n\n';
+
+    var fileContent = frontMatter + content;
+
+    publishBtn.disabled = true;
+    publishBtn.textContent = '发布中...';
+    statusMsg.className = 'status-msg show info';
+    statusMsg.textContent = '正在提交文章到 GitHub...';
+
+    // 通过 GitHub API 创建文件
+    var repo = 'chuyang1008/chuyang1008.github.io';
+    var path = '_posts/' + filename;
+    var url = 'https://api.github.com/repos/' + repo + '/contents/' + path;
+
+    // 先检查文件是否存在
+    fetch(url, {
+      headers: { 'Authorization': 'token ' + token }
+    })
+    .then(function(resp) {
+      var sha = null;
+      if (resp.ok) return resp.json().then(function(data) { sha = data.sha; throw new Error('exist'); });
+      if (resp.status === 404) return null;
+      throw new Error('API error: ' + resp.status);
+    })
+    .then(function() {
+      // 文件不存在，创建
+      var body = {
+        message: 'New post: ' + title,
+        content: btoa(unescape(encodeURIComponent(fileContent)))
+      };
+      return fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'token ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+    })
+    .catch(function(err) {
+      if (err.message === 'exist') {
+        throw new Error('文件名已存在，请修改标题或日期');
+      }
+      throw err;
+    })
+    .then(function(resp) {
+      if (!resp.ok) return resp.json().then(function(d) { throw new Error(d.message || 'API error'); });
+      return resp.json();
+    })
+    .then(function() {
+      statusMsg.className = 'status-msg show success';
+      statusMsg.textContent = '文章发布成功！GitHub Actions 将自动构建部署。';
+      publishBtn.textContent = '已发布';
+      form.reset();
+      dateInput.value = new Date().toISOString().slice(0, 10);
+    })
+    .catch(function(err) {
+      console.error(err);
+      statusMsg.className = 'status-msg show error';
+      statusMsg.textContent = '发布失败：' + err.message;
+      publishBtn.disabled = false;
+      publishBtn.textContent = '发布文章';
+    });
+  });
+})();
+</script>
