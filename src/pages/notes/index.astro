@@ -1,0 +1,12 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoteList from '../../components/NoteList.astro';
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const tags = [...new Set(posts.flatMap((post) => post.data.categories))];
+---
+<BaseLayout title="学习笔记">
+  <header class="page-intro"><p class="command"><span>~</span> ls ./notes</p><h1>学习笔记</h1><p>将实践、理解和问题解决过程整理成可检索的记录。</p></header>
+  <div class="tag-filter">{tags.map((tag) => <span>#{tag}</span>)}<small>{posts.length} entries</small></div>
+  <NoteList posts={posts} />
+</BaseLayout>

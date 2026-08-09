@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export async function getStaticPaths() { const posts = await getCollection('blog'); return posts.map((post) => ({ params: { slug: post.id.replace(/\.[^.]+$/, '') }, props: { post } })); }
+const { post } = Astro.props;
+const { Content } = await render(post);
+const notePath = post.id.replace(/\.[^.]+$/, '');
+---
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="article">
+    <a class="back" href="/notes/">← cd ../notes</a>
+    <p class="command"><span>~</span> cat ./{notePath}.md</p>
+    <div class="article-tags">{post.data.categories.map((category) => <span>#{category}</span>)}</div>
+    <h1>{post.data.title}</h1>
+    <p class="article-lede">{post.data.description}</p>
+    <div class="article-meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time><span>·</span><span>reading mode</span></div>
+    <div class="prose"><Content /></div>
+  </article>
+</BaseLayout>

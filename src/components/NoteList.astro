@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { posts: CollectionEntry<'blog'>[]; }
+const { posts } = Astro.props;
+---
+<div class="note-list">
+  {posts.map((post) => <a class="note-row" href={`/notes/${post.id.replace(/\.[^.]+$/, '')}/`}>
+    <time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}</time>
+    <div><h2>{post.data.title}</h2><p>{post.data.description}</p></div>
+    <div class="note-tags">{post.data.categories.slice(0, 2).map((category) => <span>#{category}</span>)}</div>
+    <span class="row-arrow" aria-hidden="true">→</span>
+  </a>)}
+</div>

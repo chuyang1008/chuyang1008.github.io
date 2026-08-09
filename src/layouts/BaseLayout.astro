@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string; }
+const { title, description = '记录前端与 Web 开发的学习过程，分享实践、思考与踩坑经验。' } = Astro.props;
+const pageTitle = title ? `${title} · 楚阳的技术学习笔记` : '楚阳的技术学习笔记';
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b1020" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="terminal-bar">
+        <div class="window-controls" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p><span class="muted">chuyang@notes</span>:<span class="accent">~</span>$ <span class="terminal-path">{title ? `cat /${Astro.url.pathname.split('/').filter(Boolean).join('/')}` : 'home'}</span><span class="cursor" aria-hidden="true"></span></p>
+        <a href="https://github.com/chuyang1008" target="_blank" rel="noopener">GitHub ↗</a>
+      </header>
+      <div class="workspace">
+        <aside class="sidebar">
+          <a class="brand" href="/"><span class="prompt">&gt;_</span><span>chuyang.notes</span></a>
+          <nav aria-label="站点导航">
+            <a href="/" class:list={{ active: Astro.url.pathname === '/' }}><span>01</span>首页</a>
+            <a href="/notes/" class:list={{ active: Astro.url.pathname.startsWith('/notes') }}><span>02</span>学习笔记</a>
+            <a href="/about/" class:list={{ active: Astro.url.pathname === '/about/' }}><span>03</span>关于我</a>
+            <a href="/contact/" class:list={{ active: Astro.url.pathname === '/contact/' }}><span>04</span>联系</a>
+          </nav>
+          <div class="sidebar-status"><span class="status-dot"></span>learning in public</div>
+        </aside>
+        <main><slot /></main>
+      </div>
+      <footer><span>status: online</span><span>built with Astro · GitHub Pages</span></footer>
+    </div>
+  </body>
+</html>
