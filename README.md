@@ -31,4 +31,4 @@ categories: ["React", "学习记录"]
 
 确认后运行 `npm run build`。推送到 `main` 分支后，GitHub Actions 会自动构建并发布。
 
-旧 Jekyll 文件暂时保留在仓库中，仅作为迁移参考；实际网站由 `src/` 与 Astro 工作流构建。
+
