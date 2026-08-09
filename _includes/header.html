@@ -1,15 +1,18 @@
-<nav class="navbar" id="navbar">
+<nav class="navbar" id="navbar" aria-label="主导航">
   <div class="nav-inner">
-    <a href="/" class="nav-brand">
-      <img class="nav-avatar" src="https://github.com/chuyang1008.png" alt="avatar"
+    <a href="{{ '/' | relative_url }}" class="nav-brand">
+      <img class="nav-avatar" src="https://github.com/chuyang1008.png" alt="楚阳的 GitHub 头像" width="34" height="34"
            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%233b82f6%22 width=%22100%22 height=%22100%22 rx=%2250%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-family=%22sans-serif%22>C</text></svg>'">
       <span>chuyang1008</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="/" class="{% if page.url == '/' or page.url == '/index.html' %}active{% endif %}">首页</a></li>
-      <li><a href="/blog.html" class="{% if page.url contains '/blog' %}active{% endif %}">博客</a></li>
-      <li><a href="/guestbook.html" class="{% if page.url contains '/guestbook' %}active{% endif %}">留言</a></li>
-      <li><a href="/about.html" class="{% if page.url contains '/about' %}active{% endif %}">关于</a></li>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+      <span class="sr-only">打开导航菜单</span><span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="site-navigation">
+      <li><a href="{{ '/' | relative_url }}" class="{% if page.url == '/' or page.url == '/index.html' %}active{% endif %}">首页</a></li>
+      <li><a href="{{ '/blog.html' | relative_url }}" class="{% if page.url contains '/blog' %}active{% endif %}">文章</a></li>
+      <li><a href="{{ '/about.html' | relative_url }}" class="{% if page.url contains '/about' %}active{% endif %}">关于</a></li>
+      <li><a href="{{ '/guestbook.html' | relative_url }}" class="{% if page.url contains '/guestbook' %}active{% endif %}">联系</a></li>
       <li>
         <a class="nav-github" href="https://github.com/chuyang1008" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>

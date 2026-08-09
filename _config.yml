@@ -18,21 +18,40 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: chuyang1008
-email: your-email@example.com
+title: chuyang的技术学习笔记
+email: 200202020202@gmail.com
 description: >-
-  探索技术、分享知识、记录生活
+  记录学习过程，分享实践、思考与踩坑经验。
 baseurl: ""
-url: ""
+url: "https://chuyang1008.github.io"
 github_username: chuyang1008
+author: chuyang
+timezone: Asia/Shanghai
+lang: zh-CN
 
 # Build settings
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 
 include:
   - _pages
+
+exclude:
+  - AGENTS.md
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
 
 # Exclude from processing.
 # The following items will not be processed, by default.

@@ -1,29 +1,28 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
-date:   2026-05-20 19:27:04 +0800
-categories: jekyll update
+title: "从零搭建个人技术博客：我的第一个学习记录"
+date: 2026-05-20 19:27:04 +0800
+categories: jekyll 学习记录
+description: "用 Jekyll 与 GitHub Pages 搭建个人博客时，我想清楚的目标、完成的第一步，以及接下来要持续记录的内容。"
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-Jekyll requires blog post files to be named according to the following format:
+这是这个博客的第一篇学习记录。与其等到准备好再开始，我决定先搭建一个可以持续写下去的地方：把遇到的问题、理解到的知识，以及完成项目后的复盘留下来。
 
-`YEAR-MONTH-DAY-title.MARKUP`
+## 这次我搭建了什么
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `MARKUP` is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+这个站点使用 Jekyll 生成静态页面，并由 GitHub Pages 自动部署。文章是放在 `_posts` 目录中的 Markdown 文件，因此写作时可以专注内容，不需要维护数据库或服务端。
 
-Jekyll also offers powerful support for code snippets:
+一篇文章的文件名遵循这样的格式：
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+`YEAR-MONTH-DAY-title.md`
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+文件顶部再通过 Front Matter 定义标题、日期、摘要和分类。这样文章能够自动出现在首页和文章列表里。
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+## 接下来会记录什么
+
+- 前端开发中真正理解的新概念；
+- 项目实践的过程、取舍与踩坑；
+- 提升效率的工具和工作流；
+- 值得回顾的学习方法。
+
+希望每一篇文章都能在未来帮到自己，也能帮到恰好遇到类似问题的人。

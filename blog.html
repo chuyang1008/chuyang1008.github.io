@@ -5,13 +5,16 @@ title: 博客
 
 <div class="page-header">
   <h1>博客</h1>
-  <p class="subtitle">记录思考，分享技术</p>
+  <p class="subtitle">把学习过程沉淀为清晰、可检索的技术笔记。</p>
 </div>
 
 {% assign categories = site.posts | map: "categories" | flatten | uniq | compact %}
 
-<section class="card">
-  <h2 class="card-title">文章分类</h2>
+<section class="card card-posts">
+  <div class="list-heading">
+    <div><p class="eyebrow">ALL NOTES</p><h2 class="card-title">全部文章</h2></div>
+    <span class="post-count">{{ site.posts.size }} 篇</span>
+  </div>
   {% if categories.size > 0 %}
   <div class="filter-bar" id="filterBar">
     <button class="filter-btn active" data-cat="all">全部</button>
@@ -26,7 +29,7 @@ title: 博客
   <ul class="post-list" id="postList">
     {% for post in site.posts %}
     <li class="post-item" data-categories="{% for cat in post.categories %}{{ cat | slugify }} {% endfor %}">
-      <a class="post-title" href="{{ post.url }}">{{ post.title }}</a>
+      <a class="post-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
       <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
       <div class="post-meta">
         <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
@@ -45,9 +48,6 @@ title: 博客
     {% endfor %}
   </ul>
 
-  <div class="mt-3 text-center">
-    <a href="/write.html" class="btn btn-primary btn-sm">写新文章</a>
-  </div>
 </section>
 
 <script>
