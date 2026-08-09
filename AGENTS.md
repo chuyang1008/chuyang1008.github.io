@@ -1,33 +1,25 @@
-# AGENTS.md – chuyang1008.github.io
+# AGENTS.md – 初阳的技术学习笔记
 
 ## Overview
 
-Jekyll 4.4.1 static site deployed to GitHub Pages. Ruby + Bundler. No tests, no linter, no formatter.
+Astro 5 static site deployed to GitHub Pages. Markdown articles live in Astro Content Collections.
 
 ## Commands
 
 | Action | Command |
 |---|---|
-| Dev server (live reload) | `bundle exec jekyll serve` |
-| Build only | `bundle exec jekyll build` |
-| Install gems | `bundle install` |
+| Dev server | `$env:ASTRO_TELEMETRY_DISABLED='1'; npm run dev` |
+| Build | `$env:ASTRO_TELEMETRY_DISABLED='1'; npm run build` |
+| Install dependencies | `npm install` |
 
 ## Project structure
 
-- `_posts/` – Blog posts as `YYYY-MM-DD-title.MARKUP` markdown files with YAML front matter
-- `index.html`, `about.html`, `blog.html` – Hand-crafted HTML pages with inline CSS/JS (no shared stylesheet, no Jekyll layout reuse)
-- `blog.html` uses Liquid templating (`site.posts`, `post.url`, `post.excerpt`, etc.) — edit `_posts/` to add new entries
-- `404.html` uses the `page` Jekyll layout
-- `_config.yml` – Site title, description, theme (`minima`), plugins (`jekyll-feed`)
-- `assets/images/` – Background image referenced in pages
+- `src/content/blog/` – Markdown posts with validated Front Matter
+- `src/pages/` – Astro routes
+- `src/layouts/` and `src/components/` – shared site UI
+- `src/styles/` – terminal-theme design system
+- `public/` – static files, including redirects for legacy Jekyll URLs
 
 ## Deployment
 
-- GitHub Actions workflow (`.github/workflows/jekyll-gh-pages.yml`) auto-deploys on push to `main`
-- No manual deploy step needed
-
-## Conventions
-
-- Put new posts in `_posts/` following the naming convention above
-- `categories` in post front matter power the category filter on `/blog.html`
-- `_site/`, `.sass-cache`, `.jekyll-cache`, `.jekyll-metadata`, `vendor/` are gitignored
+`.github/workflows/astro-gh-pages.yml` builds `dist/` and deploys it to GitHub Pages when `main` changes.
