@@ -17,8 +17,11 @@ Astro 5 static site deployed to GitHub Pages. Markdown articles live in Astro Co
 - `src/content/blog/` – Markdown posts with validated Front Matter
 - `src/pages/` – Astro routes
 - `src/layouts/` and `src/components/` – shared site UI
+- `src/lib/posts.ts` – shared post ordering and URL helpers
 - `src/styles/` – terminal-theme design system
 - `public/` – static files, including redirects for legacy Jekyll URLs
+
+Preserve legacy redirects when cleaning up files. Do not edit generated `dist/` or `.astro/` files.
 
 ## Deployment
 
