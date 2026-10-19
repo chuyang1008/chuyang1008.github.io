@@ -5,17 +5,12 @@ import NoteList from '../components/NoteList.astro';
 const posts = await getPosts();
 ---
 <BaseLayout>
-  <section class="home-grid">
-    <div class="hero-terminal">
-      <p class="command"><span>~</span> whoami</p>
-      <h1>Hello<br /><em>初阳 's Blog</em></h1>
-      <p class="lede">这里是初阳的公开学习档案，记录开发实践、技术思考与真实踩坑。</p>
-      <div class="command-links"><a href="/notes/">ls ./notes <b>→</b></a><a href="/about/">cat about.md <b>→</b></a></div>
-    </div>
-    <aside class="now-panel"><p class="panel-label">NOW / 现在</p><ul><li><span>→</span>os</li><li><span>→</span>cn</li><li><span>→</span>持续公开学习</li></ul></aside>
+  <section class="home-intro">
+    <h1>初阳</h1>
+    <div class="intro-bottom"><a class="text-link" href="/about/">关于我 <span aria-hidden="true">↗</span></a></div>
   </section>
-  <section class="section-block">
-    <div class="section-title"><p>RECENT_LOGS</p><h2>最近笔记</h2><a href="/notes/">查看全部 →</a></div>
+  <section class="section-block" aria-labelledby="latest-title">
+    <div class="section-title"><h2 id="latest-title">最近文章</h2><a class="text-link" href="/notes/">全部文章 <span aria-hidden="true">→</span></a></div>
     <NoteList posts={posts.slice(0, 5)} />
   </section>
 </BaseLayout>

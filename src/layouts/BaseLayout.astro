@@ -1,9 +1,9 @@
 ---
 import '../styles/global.css';
-
 interface Props { title?: string; description?: string; }
-const { title, description = '记录学习过程，分享实践、思考与踩坑经验。' } = Astro.props;
-const pageTitle = title ? `${title} · 初阳的技术学习笔记` : '初阳的技术学习笔记';
+const { title, description = '初阳的公开学习档案，记录计算机科学、开发实践与日常思考。' } = Astro.props;
+const pageTitle = title ? `${title} · 初阳` : '初阳 · 学习与思考';
+const links = [['/', '首页'], ['/notes/', '文章'], ['/about/', '关于'], ['/contact/', '联系']];
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -11,31 +11,20 @@ const pageTitle = title ? `${title} · 初阳的技术学习笔记` : '初阳的
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0b1020" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="stylesheet" href="/fonts/title/hero.css" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <title>{pageTitle}</title>
   </head>
   <body>
-    <div class="app-shell">
-      <header class="terminal-bar">
-        <div class="window-controls" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p><span class="muted">chuyang@notes</span>:<span class="accent">~</span>$ <span class="terminal-path">{title ? `cat /${Astro.url.pathname.split('/').filter(Boolean).join('/')}` : 'home'}</span><span class="cursor" aria-hidden="true"></span></p>
-        <a href="https://github.com/chuyang1008" target="_blank" rel="noopener">GitHub ↗</a>
+    <a class="skip-link" href="#main">跳至正文</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="初阳，返回首页"><img class="brand-mark" src="/avatar.png" alt="" width="42" height="42" /><span>初阳</span></a>
+        <nav aria-label="站点导航">{links.map(([href, label]) => <a href={href} aria-current={(href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(href)) ? 'page' : undefined}>{label}</a>)}</nav>
       </header>
-      <div class="workspace">
-        <aside class="sidebar">
-          <a class="brand" href="/"><span class="prompt">&gt;_</span><span>chuyang.notes</span></a>
-          <nav aria-label="站点导航">
-            <a href="/" class:list={{ active: Astro.url.pathname === '/' }}><span>01</span>首页</a>
-            <a href="/notes/" class:list={{ active: Astro.url.pathname.startsWith('/notes') }}><span>02</span>学习笔记</a>
-            <a href="/about/" class:list={{ active: Astro.url.pathname === '/about/' }}><span>03</span>关于我</a>
-            <a href="/contact/" class:list={{ active: Astro.url.pathname === '/contact/' }}><span>04</span>联系</a>
-          </nav>
-          <div class="sidebar-status"><span class="status-dot"></span>learning in public</div>
-        </aside>
-        <main><slot /></main>
-      </div>
-      <footer><span>status: online</span><span>built with Astro · GitHub Pages</span></footer>
+      <main id="main"><slot /></main>
+      <footer class="site-footer"><span>© {new Date().getFullYear()} 初阳</span><a href="https://github.com/chuyang1008" target="_blank" rel="noopener">GitHub ↗</a></footer>
     </div>
   </body>
 </html>

@@ -1,0 +1,57 @@
+media:
+  input: public/images
+  output: /images
+  rename: random
+  extensions: [png, jpg, jpeg, webp, gif, avif]
+
+content:
+  - name: posts
+    label: 文章
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, pubDate, draft]
+      sort: [pubDate, title]
+      search: [title, description]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: description
+        label: 摘要
+        type: text
+        required: true
+        description: 显示在文章列表与文章开头。
+      - name: pubDate
+        label: 文章日期
+        type: date
+        required: true
+        description: 用于显示与排序，不支持定时发布。
+        options:
+          format: yyyy-MM-dd
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: true
+        description: 开启时不会生成公开页面；关闭后保存到 main 分支会触发发布。
+      - name: body
+        label: 正文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          switcher: true

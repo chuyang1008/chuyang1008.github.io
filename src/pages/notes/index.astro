@@ -3,10 +3,9 @@ import { getPosts } from '../../lib/posts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoteList from '../../components/NoteList.astro';
 const posts = await getPosts();
-const tags = [...new Set(posts.flatMap((post) => post.data.categories))];
 ---
-<BaseLayout title="学习笔记">
-  <header class="page-intro"><p class="command"><span>~</span> ls ./notes</p><h1>学习笔记</h1><p>将实践、理解和问题解决过程整理成可检索的记录。</p></header>
-  <div class="tag-filter">{tags.map((tag) => <span>#{tag}</span>)}<small>{posts.length} entries</small></div>
+<BaseLayout title="文章">
+  <header class="page-intro"><h1>文章与笔记</h1></header>
+  <div class="archive-heading"><h2>全部文章</h2><span>共 {posts.length} 篇</span></div>
   <NoteList posts={posts} />
 </BaseLayout>

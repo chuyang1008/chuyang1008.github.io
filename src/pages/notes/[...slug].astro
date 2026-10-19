@@ -1,9 +1,9 @@
 ---
-import { getCollection, render } from 'astro:content';
-import { getPostSlug } from '../../lib/posts';
+import { render } from 'astro:content';
+import { getPosts, getPostSlug } from '../../lib/posts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getPosts();
   return posts.map((post) => ({
     params: { slug: getPostSlug(post) },
     props: { post }
@@ -11,16 +11,17 @@ export async function getStaticPaths() {
 }
 const { post } = Astro.props;
 const { Content } = await render(post);
-const notePath = getPostSlug(post);
+
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
+  <link rel="stylesheet" href="/fonts/noto-serif-sc/fonts.css" />
   <article class="article">
-    <a class="back" href="/notes/">← cd ../notes</a>
-    <p class="command"><span>~</span> cat ./{notePath}.md</p>
+    <a class="back" href="/notes/">← 返回文章列表</a>
+
     <div class="article-tags">{post.data.categories.map((category) => <span>#{category}</span>)}</div>
     <h1>{post.data.title}</h1>
     <p class="article-lede">{post.data.description}</p>
-    <div class="article-meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time><span>·</span><span>reading mode</span></div>
+    <div class="article-meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}</time></div>
     <div class="prose"><Content /></div>
   </article>
 </BaseLayout>
